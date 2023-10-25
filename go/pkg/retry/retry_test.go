@@ -108,6 +108,13 @@ func TestRetryer_Do(t *testing.T) {
 
 			err := retryer.Do(context.Background(), func(ctx context.Context) error {
 				resp, err := http.Get(server.URL)
+				defer func() {
+					if resp != nil {
+						err := resp.Body.Close()
+						assert.NoError(t, err)
+					}
+				}()
+
 				if err != nil {
 					return err
 				}
@@ -162,12 +169,18 @@ func TestRetryer_Do_WithRateLimitFirstRequestEnabled(t *testing.T) {
 	// Exhaust the token bucket. Recall that the capacity is DefaultRetryRateTokens/DefaultRetryCost. But each
 	// iteration we make config.MaxAttempts calls. And then we add one to make sure we exhaust the bucket.
 	iterations := int(DefaultRetryRateTokens / DefaultRetryCost)
-	iterations = iterations / config.MaxAttempts
-	iterations = iterations + 1
+	iterations /= config.MaxAttempts
+	iterations++
 
 	for i := 0; i < iterations; i++ {
 		err := retryer.Do(context.Background(), func(ctx context.Context) error {
 			resp, err := http.Get(server.URL)
+			defer func() {
+				if resp != nil {
+					err := resp.Body.Close()
+					assert.NoError(t, err)
+				}
+			}()
 			if err != nil {
 				return err
 			}
@@ -186,6 +199,12 @@ func TestRetryer_Do_WithRateLimitFirstRequestEnabled(t *testing.T) {
 	// the first attempt, the request should still be successful because we allow probes to be made.
 	err := retryer.Do(context.Background(), func(ctx context.Context) error {
 		resp, err := http.Get(server.URL)
+		defer func() {
+			if resp != nil {
+				err := resp.Body.Close()
+				assert.NoError(t, err)
+			}
+		}()
 		if err != nil {
 			return err
 		}
@@ -219,6 +238,12 @@ func TestRetryer_Do_ContextCancelled(t *testing.T) {
 
 	err := retryer.Do(ctx, func(ctx context.Context) error {
 		resp, err := http.Get(server.URL)
+		defer func() {
+			if resp != nil {
+				err := resp.Body.Close()
+				assert.NoError(t, err)
+			}
+		}()
 		if err != nil {
 			return err
 		}
@@ -253,6 +278,12 @@ func TestRetryer_Do_ContextDeadlineExceeded(t *testing.T) {
 
 	err := retryer.Do(ctx, func(ctx context.Context) error {
 		resp, err := http.Get(server.URL)
+		defer func() {
+			if resp != nil {
+				err := resp.Body.Close()
+				assert.NoError(t, err)
+			}
+		}()
 		if err != nil {
 			return err
 		}
