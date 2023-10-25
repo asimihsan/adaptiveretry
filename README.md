@@ -20,3 +20,7 @@ quotas.
 ## Contents
 
 This repo will contain Adaptive Retry imlpementations in various languages.
+
+## License
+
+This library is licensed under the Apache 2.0 License. See [`LICENSE`](LICENSE) for more information.
