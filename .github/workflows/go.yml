@@ -1,0 +1,45 @@
+name: Go CI
+
+on:
+    push:
+        branches:
+            - "*"
+    pull_request:
+        branches:
+            - "*"
+
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Set up Go 1.21.3
+              uses: actions/setup-go@v2
+              with:
+                  go-version: 1.21.3
+
+            - name: Check out code into the Go module directory
+              uses: actions/checkout@v4
+
+            - name: Run golangci-lint
+              uses: golangci/golangci-lint-action@v3
+              with:
+                  version: v1.55.1
+                  working-directory: go
+
+            - name: Get dependencies
+              run: go mod download
+              working-directory: go
+
+            - name: Run go mod tidy
+              run: |
+                  go mod tidy
+                  git diff --exit-code -- go.mod go.sum
+              working-directory: go
+
+            - name: Run Tests
+              run: go test ./... -v
+              working-directory: go
+
+            - name: Display Go version
+              run: go version

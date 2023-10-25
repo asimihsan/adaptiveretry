@@ -47,7 +47,7 @@ package main
 
 import (
 	"context"
-    "github.com/asimihsan/adaptiveretry/go"
+	"github.com/asimihsan/adaptiveretry/go"
 )
 
 retryer := retry.NewRetryer(retry.NewDefaultConfig())
