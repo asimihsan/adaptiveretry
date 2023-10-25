@@ -1,0 +1,35 @@
+run:
+  go: '1.21'
+  timeout: 5m  # Adjust as necessary to ensure linting completes, especially in larger projects.
+
+linters:
+  disable-all: true  # Start with all linters disabled, then explicitly enable the ones you want.
+  enable:
+    - bodyclose  # Ensures HTTP response bodies are closed.
+    - durationcheck  # Checks for time.Duration expressions that may be misleading.
+    - errcheck  # Checks that errors returned by functions are not ignored.
+    - exhaustive # Checks for missing cases in select and switch statements.
+    - exportloopref  # Checks for pointers to enclosing loop variables.
+    - gocritic  # A linter that provides many different checks, customizable to your needs.
+    - goimports  # Ensures imports are sorted and any necessary imports are added.
+    - gosec  # Inspects source code for security problems by scanning the Go AST.
+    - gosimple  # Simplifies code whenever possible, making it more readable.
+    - govet  # Reports potential issues that could lead to bugs.
+    - ineffassign  # Detects when assignments to existing variables are not used.
+    - misspell  # Corrects commonly misspelled English words in source files.
+    - nilerr  # Checks for a no-op error handling, which could indicate a bug.
+    - prealloc  # Suggests pre-allocation of slices for performance improvement.
+    - staticcheck  # A highly-regarded linter focusing on correctness and performance.
+    - typecheck  # Like the front-end of a Go compiler, checks types.
+    - unconvert  # Removes unnecessary type conversions.
+    - unused  # Checks Go code for unused constants, variables, functions and types.
+
+linters-settings:
+  cyclop: # Checks cyclomatic complexity.
+    max-complexity: 30
+    package-average: 10.0
+  funlen: # Checks for long functions.
+    lines: 120
+    statements: 60
+  lll: # Checks for long lines.
+    line-length: 120
